@@ -8,8 +8,6 @@ from django.db import models
 #     sim2 = models.FloatField()
 #     sim3 = models.FloatField()
 
-class ChatRoom(models.Model):
-    name = models.CharField(max_length=255)
     
 class Message(models.Model):
     user = models.CharField(max_length=255)
