@@ -5,8 +5,7 @@
 
 html, body {
     margin: 0;
-    padding: 4%;
-    height: 100%;
+    /* height: 100%; */
     font-family: 'Roboto', 'D2Coding', sans-serif;
     background-color: #f8f8f8;
 }
@@ -14,27 +13,21 @@ html, body {
 a {
     color: inherit;
     text-decoration: none;
-  }
-
-main {
-    /* header height 60px + footer height 60px = 120px */
-    /* height: calc(100% - 120px);  */
-    max-width: 720px;
-    padding: 10%;
-    margin: 0 auto;
-    text-align: center;
-    display: table;
-    border-radius: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    background-color: white;
-    overflow: hidden; /* 내부 요소가 넘치지 않도록 설정 */
 }
 
-main button {
+header {
+    text-align: center;
+    height: 40%;
+    padding: 6%;
+    /* background-color: rgb(219, 219, 219); */
+}
+
+
+header button {
     margin-top: 50px;
     padding: 20px 50px;
     color: white;
-    background-color: #6c9ac6;
+    background-color: #38b8b2;
     border: none;
     border-radius: 50px;
     font-size: 20px;
@@ -42,15 +35,42 @@ main button {
     cursor: pointer;
 }
 
-#skill_info {
-    padding-top: 10%;   
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#skill_info h2 {
-    float: left;
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
 }
 
-#skill_info li {
-    float: left;
-    /* padding-left: 5%; */
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
 }
+
+
+main {
+    text-align: center;
+}
+
+#contents-card {
+    /* header height 60px + footer height 60px = 120px */
+    /* height: calc(100% - 120px);  */
+    max-width: 720px;
+    padding: 3%;
+    margin: 1%;
+    text-align: center;
+    display: inline-block;
+    /* width: 10%; */
+    min-width: 10%;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    background-color: white;
+    overflow: hidden; /* 내부 요소가 넘치지 않도록 설정 */
+}
+
