@@ -5,7 +5,7 @@ from django import forms
 from django.urls import reverse
 from django.utils import timezone
 
-from chatgpt.models import Message
+from chatgpt.models import Message,ChatRoom
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, AIMessage
 from langchain.embeddings import OpenAIEmbeddings
@@ -57,4 +57,14 @@ def chat(request):
 
         return JsonResponse({'message': bot_message})
 
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+@csrf_exempt
+def add_chat_room(request):
+    if request.method == 'POST':
+        room_name = request.POST.get('name')
+        if room_name:
+            new_room = ChatRoom.objects.create(name=room_name)
+            return JsonResponse({'name': new_room.name, 'url': reverse('chatgpt:chat_view', args=[new_room.id])})
+        return JsonResponse({'error': 'Room name is required'}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
