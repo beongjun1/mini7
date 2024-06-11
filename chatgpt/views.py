@@ -5,7 +5,7 @@ from django import forms
 from django.urls import reverse
 from django.utils import timezone
 
-from chatgpt.models import Message
+from chatgpt.models import Message, ChatRoom
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, AIMessage
 from langchain.embeddings import OpenAIEmbeddings
@@ -43,11 +43,10 @@ def chat(request):
         #post로 받은 question (index.html에서 name속성이 question인 input태그의 value값)을 가져옴
         user_message = request.POST.get('question')
 
-        memory = ConversationBufferMemory(memory_key="chat_history", input_key="question", output_key="result", return_messages=True)
         chat = ChatOpenAI(model="gpt-3.5-turbo")
         k = 3
         retriever = database.as_retriever(search_kwargs={"k": k})
-        qa = ConversationalRetrievalChain.from_llm(llm=chat, retriever=retriever, return_source_documents=True,memory=memory,output_key='result')
+        qa = RetrievalQA.from_llm(llm=chat, retriever=retriever, return_source_documents=True)
 
         result = qa(user_message)
         bot_message = result["result"]
@@ -57,4 +56,15 @@ def chat(request):
 
         return JsonResponse({'message': bot_message})
 
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+@csrf_exempt
+def add_chat_room(request):
+    if request.method == 'POST':
+        room_name = request.POST.get('name')
+        if room_name:
+            new_room = ChatRoom.objects.create(name=room_name)
+            return JsonResponse({'name': new_room.name, 'url': reverse('chatgpt:chat_view', args=[new_room.id])})
+        return JsonResponse({'error': 'Room name is required'}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
