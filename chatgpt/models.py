@@ -16,3 +16,10 @@ class Message(models.Model):
     
     def __str__(self):
         return f"{self.user}: {self.text[:50]}"
+    
+class EmbeddingFulltextSearchContent(models.Model):
+    id = models.IntegerField(primary_key=True)
+    c0 = models.TextField()
+    string_value = models.TextField(null=True)
+    class Meta:
+        db_table = 'embedding_fulltext_search_content'
