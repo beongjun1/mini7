@@ -8,21 +8,35 @@
     <link rel="stylesheet" href="{% static 'gpt/style.css' %}">
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">Chatbot</div>
-        <div class="chat-messages" id="chat-messages">
-            <!-- 이전 메시지 표시 -->
-            <ul class="messages">
-                {% for message in messages %}
-                    <li class="message {% if message.user == 'User' %}user{% else %}bot{% endif %}">
-                        <div class="bubble">{{ message.text }}</div>
-                    </li>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Chat Rooms</h2>
+                <button onclick="addChatRoom()">+</button>
+            </div>
+            <ul class="chat-rooms" id="chat-rooms">
+                <!-- 채팅방 목록 -->
+                {% for room in chat_rooms %}
+                    <li class="chat-room" onclick="selectChatRoom('{{ room.id }}')">{{ room.name }}</li>
                 {% endfor %}
             </ul>
         </div>
-        <div class="input-container">
-            <textarea id="message-input" placeholder="Type a message..."></textarea>
-            <button onclick="sendMessage()">Send</button>
+        <div class="chat-container">
+            <div class="chat-header">Chatbot</div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- 이전 메시지 표시 -->
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li class="message {% if message.user == 'User' %}user{% else %}bot{% endif %}">
+                            <div class="bubble">{{ message.text }}</div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="input-container">
+                <textarea id="message-input" placeholder="Type a message..."></textarea>
+                <button onclick="sendMessage()">Send</button>
+            </div>
         </div>
     </div>
     <script>
@@ -85,7 +99,7 @@
                 botMessage.innerHTML = `<div class="bubble">${data.message}</div>`;
                 messagesContainer.appendChild(botMessage);
 
-                // 스크롤을 가장 아래로 이동
+                // 스크롤을 자동으로 가장 아래로 이동
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
                 botMessage.scrollIntoView({ behavior: 'smooth' });
             })
@@ -93,6 +107,27 @@
                 console.error('There has been a problem with your fetch operation:', error);
                 messagesContainer.removeChild(typingIndicator);
             });
+        }
+
+        // 채팅방 추가
+        function addChatRoom() {
+            const roomName = prompt("Enter chat room name:");
+            //const input = document.getElementById('message-input');
+            //const roomName = input.value;
+            roomName
+            if (roomName) {
+                const chatRooms = document.getElementById('chat-rooms');
+                const newRoom = document.createElement('li');
+                newRoom.className = 'chat-room';
+                newRoom.textContent = roomName;
+                newRoom.onclick = function() { selectChatRoom(roomName) };
+                chatRooms.appendChild(newRoom);
+            }
+        }
+
+        function selectChatRoom(roomId) {
+            // 이 함수에서 선택한 채팅방에 맞게 메시지를 로드하는 로직
+            console.log('Selected chat room:', roomId);
         }
 
         // Enter 키로 메시지 전송
