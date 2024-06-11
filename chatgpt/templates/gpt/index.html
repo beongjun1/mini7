@@ -1,0 +1,55 @@
+{% load static %}
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'gpt/style.css' %}">
+{% endblock %}
+
+<div class="chat-container">
+    <div class="chat-header">Chatbot</div>
+    <div class="chat-messages" id="chat-messages">
+        <!-- 메시지가 여기에 추가됩니다. -->
+    </div>
+    <form id="form" class="chat-input" action="chat" method="post" enctype="application/x-www-form-urlencoded">
+        {% csrf_token %}
+        <textarea id="question" name="question" placeholder="Type something here.."></textarea>
+        {% comment %} <button id="text-button" type="submit">Send</button> {% endcomment %}
+        <input type="button" value="Send" id="text-button" class="send_btn" />
+    </form>
+</div>
+
+<script>
+    
+    
+<script>
+    $(document).ready(function() {
+        // 페이지가 로드될 때 이전의 질문과 답변을 가져옴
+        $.ajax({
+            url: '/get_previous_chats', // 이전 대화 기록을 가져오는 엔드포인트
+            type: 'GET',
+            success: function(data) {
+                // 가져온 데이터를 처리하여 채팅창에 추가
+                for (var i = 0; i < data.length; i++) {
+                    var chat = data[i];
+                    var message = '<div class="message user">' +
+                                    '<div class="bubble">' +
+                                        '<strong>Time:</strong> ' + chat.datetime + '<br>' +
+                                        '<strong>Question:</strong> ' + chat.query +
+                                    '</div>' +
+                                  '</div>' +
+                                  '<div class="message bot">' +
+                                    '<div class="bubble">' +
+                                        '<strong>Answer:</strong> ' + chat.answer + '<br>' +
+                                        '<strong>Similarity Scores:</strong> ' + chat.sim1 + ', ' + chat.sim2 + ', ' + chat.sim3 +
+                                    '</div>' +
+                                  '</div>';
+                    $('#chat-messages').append(message);
+                }
+            },
+            error: function(xhr, status, error) {
+                // 에러 처리
+            }
+        });
+    
+        // 나머지 채팅 기능들 구현...
+    });
+
+</script>

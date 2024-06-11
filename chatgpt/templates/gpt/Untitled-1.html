@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% block extrahead %}
+    <link rel="stylesheet" href="{% static 'gpt/style.css' %}">
+    {% endblock %}
+</head>
+<body>
+<div class="chat-container">
+    <div class="chat-header">Chatbot</div>
+    <div class="chat-messages" id="chat-messages">  
+        <!-- 이전 질문 및 응답 표시 -->
+        {% for chat in chat_history %}
+            <div class="message user">
+                <div class="bubble"><strong>Time:</strong> {{ chat.datetime }}<br><strong>Question:</strong> {{ chat.query }}</div>
+            </div>
+            <div class="message bot">
+                <div class="bubble"><strong>Answer:</strong> {{ chat.answer }}<br><strong>Similarity Scores:</strong> {{ chat.sim1 }}, {{ chat.sim2 }}, {{ chat.sim3 }}</div>
+            </div>
+        {% endfor %}
+        <!-- 현재 질문 및 응답 표시 -->
+        <div id="divbox" class="chat_content"></div>
+        <div class="message user">
+            <div class="bubble">{{ question }}</div>
+        </div>
+        <div class="message bot">
+            <div class="bubble">{{ result }}</div>
+        </div>
+    </div>
+    <form class="chat-input" action="chat" method="post" enctype="application/x-www-form-urlencoded">
+        {% csrf_token %}
+        <textarea id="question" name="question" placeholder="Type something here.."></textarea>
+        <button id="text-button" type="submit">Send</button>
+        {% comment %} <input type="button" value="Send" id="text-button" class="send_btn" /> {% endcomment %}
+    </form>
+</div>
+</body>
+</html>

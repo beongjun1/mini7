@@ -1,0 +1,56 @@
+@font-face {
+    font-family: 'D2Coding';
+    src: url('../font/D2Coding.ttc');
+}
+
+html, body {
+    margin: 0;
+    padding: 4%;
+    height: 100%;
+    font-family: 'Roboto', 'D2Coding', sans-serif;
+    background-color: #f8f8f8;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+main {
+    /* header height 60px + footer height 60px = 120px */
+    /* height: calc(100% - 120px);  */
+    max-width: 720px;
+    padding: 10%;
+    margin: 0 auto;
+    text-align: center;
+    display: table;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    background-color: white;
+    overflow: hidden; /* 내부 요소가 넘치지 않도록 설정 */
+}
+
+main button {
+    margin-top: 50px;
+    padding: 20px 50px;
+    color: white;
+    background-color: #6c9ac6;
+    border: none;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#skill_info {
+    padding-top: 10%;   
+}
+
+#skill_info h2 {
+    float: left;
+}
+
+#skill_info li {
+    float: left;
+    /* padding-left: 5%; */
+}

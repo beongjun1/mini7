@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <link rel="stylesheet" href="{% static 'gpt/style.css' %}">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">Chatbot</div>
+        <div class="chat-messages" id="chat-messages">
+            <!-- 이전 메시지 표시 -->
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="message {% if message.user == 'User' %}user{% else %}bot{% endif %}">
+                        <div class="bubble">{{ message.text }}</div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="input-container">
+            <textarea id="message-input" placeholder="Type a message..."></textarea>
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const message = input.value;
+
+            if (message.trim() === '') return;
+
+            const messagesContainer = document.querySelector('.messages');
+            
+            // 사용자 메시지를 화면에 즉시 추가
+            const userMessage = document.createElement('li');
+            userMessage.className = 'message user';
+            userMessage.innerHTML = `<div class="bubble">${message}</div>`;
+            messagesContainer.appendChild(userMessage);
+
+            // "typing..." 애니메이션 추가
+            const typingIndicator = document.createElement('li');
+            typingIndicator.className = 'message dot typing';
+            typingIndicator.innerHTML = `
+                <div class="bubble">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>`;
+            messagesContainer.appendChild(typingIndicator);
+
+            // 스크롤을 가장 아래로 이동
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            userMessage.scrollIntoView({ behavior: 'smooth' });
+
+            // 입력 필드 초기화
+            input.value = '';
+
+            // 서버에 메시지 전송
+            fetch("{% url 'chatgpt:chat_api' %}", {     // 'chatgpt:chat_api'라는 URL 이름을 가진 뷰의 URL을 생성
+                method: 'POST',     // POST 메서드를 사용
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',  // 서버로 보내기 전 모든 문자를 인코딩
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                // 전송할 데이터를 URL 인코딩된 형식으로 설정
+                // message는 사용자가 입력한 질문, encodeURIComponent 함수는 이 메시지를 URL 인코딩
+                body: `question=${encodeURIComponent(message)}`
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // "typing..." 애니메이션 제거
+                messagesContainer.removeChild(typingIndicator);
+
+                // 봇 메시지를 화면에 추가
+                const botMessage = document.createElement('li');
+                botMessage.className = 'message bot';
+                botMessage.innerHTML = `<div class="bubble">${data.message}</div>`;
+                messagesContainer.appendChild(botMessage);
+
+                // 스크롤을 가장 아래로 이동
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                botMessage.scrollIntoView({ behavior: 'smooth' });
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+                messagesContainer.removeChild(typingIndicator);
+            });
+        }
+
+        // Enter 키로 메시지 전송
+        document.getElementById('message-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

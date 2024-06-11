@@ -1,0 +1,19 @@
+<!doctype html>
+{% load static %}
+<html>
+    <head>        
+        <title>Django</title>
+        <meta charset="utf-8">    
+        <link rel="stylesheet" href="{% static 'base.css' %}" />    
+    </head>
+    <body>
+        <main>
+            <h2>임병준(a051230)</h2>
+            <button><a href="chatgpt/">Chatbot</a></button>
+        
+            <div id="skill_info">
+                {% comment %} <h2>사용 기술</h2> {% endcomment %}
+                <li><a href="https://www.djangoproject.com/" target="_blank">Django</a> : Python으로 작성된 오픈 소스 웹 프레임워크로, 빠르고 쉬운 웹 개발이 가능</li>
+            </div>
+        </main>
+    </body>
