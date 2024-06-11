@@ -1,11 +1,9 @@
-import csv
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django import forms
 from django.urls import reverse
 from django.utils import timezone
-
 
 from chatgpt.models import Message,ChatRoom
 from langchain.chat_models import ChatOpenAI
@@ -18,7 +16,6 @@ from langchain.schema import Document
 
 import pandas as pd
 import json
-import csv
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -71,17 +68,3 @@ def add_chat_room(request):
             return JsonResponse({'name': new_room.name, 'url': reverse('chatgpt:chat_view', args=[new_room.id])})
         return JsonResponse({'error': 'Room name is required'}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
-
-
-def download(request):
-    messages = Message.objects.all()
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="chat_history.csv"'
-    response.write('\ufeff'.encode('utf8'))
-
-    writer = csv.writer(response)
-    writer.writerow(['User', 'Message', 'Timestamp'])
-    for message in messages:
-        writer.writerow([message.user, message.text, message.timestamp])
-
-    return response

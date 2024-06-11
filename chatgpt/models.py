@@ -25,5 +25,3 @@ class EmbeddingFulltextSearchContent(models.Model):
     string_value = models.TextField(null=True)
     class Meta:
         db_table = 'embedding_fulltext_search_content'
-
-

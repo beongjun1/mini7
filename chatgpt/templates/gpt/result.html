@@ -16,7 +16,6 @@
             </div>
             <ul class="chat-rooms" id="chat-rooms">
                 <!-- 채팅방 목록 -->
-                <a href="{% url 'chatgpt:download_chat_history' %}" class="button-link">대화 히스토리 다운로드</a>
                 {% for room in chat_rooms %}
                     <li class="chat-room" onclick="selectChatRoom('{{ room.id }}')">{{ room.name }}</li>
                 {% endfor %}
@@ -37,7 +36,8 @@
             <div class="input-container">
                 <textarea id="message-input" placeholder="Type a message..."></textarea>
                 <button onclick="sendMessage()">Send</button>
-            </div>            
+            </div>
+        </div>
     </div>
     <script>
         function sendMessage() {
@@ -135,4 +135,4 @@
         });
     </script>
 </body>
-</html> 
+</html>
