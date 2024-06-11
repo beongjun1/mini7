@@ -45,7 +45,7 @@
             const message = input.value;
 
             if (message.trim() === '') return;
-            
+
             const messagesContainer = document.querySelector('.messages');
             
             // 사용자 메시지를 화면에 즉시 추가
@@ -53,6 +53,7 @@
             userMessage.className = 'message user';
             userMessage.innerHTML = `<div class="bubble">${message}</div>`;
             messagesContainer.appendChild(userMessage);
+
             // "typing..." 애니메이션 추가
             const typingIndicator = document.createElement('li');
             typingIndicator.className = 'message dot typing';
@@ -63,11 +64,14 @@
                     <div class="dot"></div>
                 </div>`;
             messagesContainer.appendChild(typingIndicator);
+
             // 스크롤을 가장 아래로 이동
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
             userMessage.scrollIntoView({ behavior: 'smooth' });
+
             // 입력 필드 초기화
             input.value = '';
+
             // 서버에 메시지 전송
             fetch("{% url 'chatgpt:chat_api' %}", {     // 'chatgpt:chat_api'라는 URL 이름을 가진 뷰의 URL을 생성
                 method: 'POST',     // POST 메서드를 사용
@@ -88,7 +92,7 @@
             .then(data => {
                 // "typing..." 애니메이션 제거
                 messagesContainer.removeChild(typingIndicator);
-                
+
                 // 봇 메시지를 화면에 추가
                 const botMessage = document.createElement('li');
                 botMessage.className = 'message bot';
