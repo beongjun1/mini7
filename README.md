@@ -9,22 +9,6 @@ python manage.py shell
 -> shell 명령어
 
 ```python
-# message, chat 데이터 삭제하고 auto_increment 리셋
-from django.db import connection
-
-def reset_autoincrement():
-    with connection.cursor() as cursor:
-        # Reset the AUTO_INCREMENT for Message
-        cursor.execute("DELETE FROM sqlite_sequence WHERE name='chatgpt_message';")
-        cursor.execute("DELETE FROM chatgpt_message;")
-
-        # Reset the AUTO_INCREMENT for Chat
-        cursor.execute("DELETE FROM sqlite_sequence WHERE name='chatgpt_chat';")
-        cursor.execute("DELETE FROM chatgpt_chat;")
-
-# Call the function to reset the AUTO_INCREMENT fields
-reset_autoincrement()
-
 # 캐시용 데이터베이스 생성
 import sqlite3
 
@@ -46,6 +30,32 @@ conn.commit()
 
 # 연결 닫기
 conn.close()
+
+# message, chat 데이터 삭제하고 auto_increment 리셋
+# 또는 db.sqlite3 파일 삭제
+# 필수 아님. db 너무 꼬이고 못고치겠으면 ㄱㄱ
+from django.db import connection
+
+def reset_autoincrement():
+    with connection.cursor() as cursor:
+        # Reset the AUTO_INCREMENT for Message
+        cursor.execute("DELETE FROM sqlite_sequence WHERE name='chatgpt_message';")
+        cursor.execute("DELETE FROM chatgpt_message;")
+
+        # Reset the AUTO_INCREMENT for Chat
+        cursor.execute("DELETE FROM sqlite_sequence WHERE name='chatgpt_chat';")
+        cursor.execute("DELETE FROM chatgpt_chat;")
+
+# Call the function to reset the AUTO_INCREMENT fields
+reset_autoincrement()
+```
+
+-> 다시 qa_system 환경에서
+
+```shell
+# migrations 폴더 내부 __init__.py 빼고 다 삭제 (이것도 필수 아님)
+python manage.py makemigrations
+python manage.py migrate
 ```
 
 
@@ -66,3 +76,4 @@ chatgpt 클릭 -> http://127.0.0.1:8000/chatgpt/chat_view/admin/8/ 이동
 - user_id = 'admin'
   - 모든 채팅창 열람 가능
   - 나머지 id들은 본인 채팅창만 열람 가능
+
