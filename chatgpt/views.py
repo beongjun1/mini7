@@ -37,20 +37,23 @@ database = Chroma(persist_directory = "./db", embedding_function = embeddings)
 # SQLiteCache 설정
 cache = SQLiteCache(database_path="chat_cache.db")
 
-def chat_view(request, chat_id = None):
-    chats = Chat.objects.all().order_by('-timestamp')
+def chat_view(request, user_id = 'admin', chat_id = None):
+    if user_id == 'admin':
+        chats = Chat.objects.all().order_by('-timestamp')
+    else:
+        chats = Chat.objects.filter(user_id=user_id).order_by('-timestamp')
     # 처음 chat_id 없이 url 입력한 경우, 가장 최근 chat으로 리디렉션
     if chat_id is None:
         latest_chat = chats.first()
         if latest_chat:
-            return HttpResponseRedirect(f'/chatgpt/chat_view/{latest_chat.id}/')
+            return HttpResponseRedirect(f'/chatgpt/chat_view/{user_id}/{latest_chat.id}/')
         else:
             # 만약 chat 데이터가 없다면 빈 페이지를 렌더링
-            return render(request, 'gpt/result.html', {'chat_id': None, 'messages': [], 'chats': chats})
+            return render(request, 'gpt/result.html', {'chat_id': None, 'messages': [], 'chats': chats, 'user_id':user_id})
     
     chat = get_object_or_404(Chat, pk=chat_id)
     messages = Message.objects.filter(chat=chat).order_by('timestamp')
-    return render(request, 'gpt/result.html', {'chat_id': chat_id, 'messages': messages, 'chats': chats})
+    return render(request, 'gpt/result.html', {'chat_id': chat_id, 'messages': messages, 'chats': chats, 'user_id':user_id})
 
 def get_memory_from_messages(messages):
     memory = ConversationBufferMemory(memory_key="chat_history", input_key="question", output_key="answer", return_messages=True)
@@ -106,12 +109,14 @@ def chat(request):
         #post로 받은 question (index.html에서 name속성이 question인 input태그의 value값)을 가져옴
         human_message = request.POST.get('question')
         chat_id = request.POST.get('chat_id', None)
+        user_id = request.POST.get('user_id', 'admin')
+
         if chat_id:
             chat = get_object_or_404(Chat, pk=chat_id)
-            messages = Message.objects.filter(chat_id=chat_id).order_by('timestamp')
+            messages = Message.objects.filter(chat_id=chat_id, user_id=user_id).order_by('timestamp')
             memory = get_memory_from_messages(messages)
         else:
-            chat = Chat.objects.create(thumbnail=human_message[:10])
+            chat = Chat.objects.create(thumbnail=human_message[:10], user_id=user_id)
             chat_id = chat.id
             memory = ConversationBufferMemory(memory_key="chat_history", input_key="question", output_key="answer", return_messages=True)
             messages = []
@@ -147,8 +152,8 @@ def chat(request):
             memory.chat_memory.add_message(AIMessage(content=ai_message))
         
         # Message 데이터 추가
-        Message.objects.create(user='User', text=human_message, chat=chat)
-        Message.objects.create(user='Bot', text=ai_message, chat=chat)
+        Message.objects.create(user='User', text=human_message, chat=chat, user_id=user_id)
+        Message.objects.create(user='Bot', text=ai_message, chat=chat, user_id=user_id)
 
         # 캐시에 답변 저장 (메모리 캐시와 SQLite 캐시 모두)
         cache_answer(human_message, ai_message)
@@ -157,7 +162,7 @@ def chat(request):
         # print(get_cached_answer_memory.cache_info())
 
         # 응답을 보여주기 위한 html 선택 (위에서 처리한 context를 함께 전달)
-        return JsonResponse({'success': True, 'chat_id': chat.id, 'message': ai_message})
+        return JsonResponse({'success': True, 'chat_id': chat.id, 'message': ai_message, 'user_id':user_id})
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 @csrf_exempt
