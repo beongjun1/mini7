@@ -6,19 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot</title>
     <link rel="stylesheet" href="{% static 'gpt/style.css' %}">
+    <link rel="stylesheet" href="{% static 'gpt/chatstyles.css' %}">
 </head>
 <body>
     <div class="container">
         <div class="sidebar">
-            <div class="sidebar-header">
-                <h2>Chat Rooms</h2>
-                <button onclick="addChatRoom()">+</button>
-            </div>
-            <ul class="chat-rooms" id="chat-rooms">
-                <!-- 채팅방 목록 -->
-                <a href="{% url 'chatgpt:download_chat_history' %}" class="button-link">대화 히스토리 다운로드</a>
-                {% for room in chat_rooms %}
-                    <li class="chat-room" onclick="selectChatRoom('{{ room.id }}')">{{ room.name }}</li>
+            <button onclick="displayEmptyChat()">New Chat</button>
+            <ul class="chat-list">
+                {% for chat in chats %}
+                    <li class="chat" onclick="loadChat({{ chat.id }})">
+                        <div class="bubble">{{ chat.thumbnail }}</div>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
@@ -37,9 +35,34 @@
             <div class="input-container">
                 <textarea id="message-input" placeholder="Type a message..."></textarea>
                 <button onclick="sendMessage()">Send</button>
+                <a href="{% url 'chatgpt:download_chat_history' %}" class="button-link">Save</a>
             </div>            
+
     </div>
     <script>
+        let chatId = "{{ chat_id|default_if_none:'' }}";
+        if (chatId === "") chatId = null;
+
+        function loadChat(id) {
+            console.log("Loading chat with ID:", id);
+            fetch(`/chatgpt/chat_view/${id}/`)
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const messages = doc.querySelector('.chat-messages').innerHTML;
+                    document.querySelector('.chat-messages').innerHTML = messages;
+                    chatId = id;
+                    history.pushState(null, '', `/chatgpt/chat_view/${id}/`);
+                });
+        }
+
+        function displayEmptyChat() {
+            document.querySelector('.chat-messages').innerHTML = '<ul class="messages"></ul>';
+            chatId = null; // 명시적으로 chatId를 null로 설정
+            history.pushState(null, '', `/chatgpt/chat_view/`);
+        }
+
         function sendMessage() {
             const input = document.getElementById('message-input');
             const message = input.value;
@@ -47,13 +70,12 @@
             if (message.trim() === '') return;
 
             const messagesContainer = document.querySelector('.messages');
-            
+
             // 사용자 메시지를 화면에 즉시 추가
             const userMessage = document.createElement('li');
             userMessage.className = 'message user';
             userMessage.innerHTML = `<div class="bubble">${message}</div>`;
             messagesContainer.appendChild(userMessage);
-
             // "typing..." 애니메이션 추가
             const typingIndicator = document.createElement('li');
             typingIndicator.className = 'message dot typing';
@@ -64,51 +86,55 @@
                     <div class="dot"></div>
                 </div>`;
             messagesContainer.appendChild(typingIndicator);
-
             // 스크롤을 가장 아래로 이동
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
             userMessage.scrollIntoView({ behavior: 'smooth' });
-
             // 입력 필드 초기화
             input.value = '';
 
             // 서버에 메시지 전송
-            fetch("{% url 'chatgpt:chat_api' %}", {     // 'chatgpt:chat_api'라는 URL 이름을 가진 뷰의 URL을 생성
-                method: 'POST',     // POST 메서드를 사용
+            let url = "/chatgpt/api/chat/";
+            let bodyContent = `question=${encodeURIComponent(message)}`;
+            if (chatId) {
+                bodyContent += `&chat_id=${encodeURIComponent(chatId)}`;
+            }
+
+            fetch(url, {
+                method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',  // 서버로 보내기 전 모든 문자를 인코딩
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'X-CSRFToken': '{{ csrf_token }}'
                 },
-                // 전송할 데이터를 URL 인코딩된 형식으로 설정
-                // message는 사용자가 입력한 질문, encodeURIComponent 함수는 이 메시지를 URL 인코딩
-                body: `question=${encodeURIComponent(message)}`
+                body: bodyContent
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 // "typing..." 애니메이션 제거
                 messagesContainer.removeChild(typingIndicator);
 
-                // 봇 메시지를 화면에 추가
-                const botMessage = document.createElement('li');
-                botMessage.className = 'message bot';
-                botMessage.innerHTML = `<div class="bubble">${data.message}</div>`;
-                messagesContainer.appendChild(botMessage);
+                if (data.success) {
+                    if (!chatId) {
+                        chatId = data.chat_id;  // 새로운 chat_id 설정
+                        history.pushState(null, '', `/chatgpt/chat_view/${chatId}/`);
+                        window.location.href = `/chatgpt/chat_view/${chatId}/`;  // URL 변경
+                    }
+                    const botMessage = document.createElement('li');
+                    botMessage.className = 'message bot';
+                    botMessage.innerHTML = `<div class="bubble">${data.message}</div>`;
+                    messagesContainer.appendChild(botMessage);
 
-                // 스크롤을 자동으로 가장 아래로 이동
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                botMessage.scrollIntoView({ behavior: 'smooth' });
+                    // 스크롤을 가장 아래로 이동
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    botMessage.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert('Failed to send message.');
+                }
             })
             .catch(error => {
                 console.error('There has been a problem with your fetch operation:', error);
                 messagesContainer.removeChild(typingIndicator);
             });
         }
-
         // 채팅방 추가
         function addChatRoom() {
             const roomName = prompt("Enter chat room name:");
@@ -129,7 +155,6 @@
             // 이 함수에서 선택한 채팅방에 맞게 메시지를 로드하는 로직
             console.log('Selected chat room:', roomId);
         }
-
         // Enter 키로 메시지 전송
         document.getElementById('message-input').addEventListener('keypress', function (e) {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -140,4 +165,3 @@
     </script>
 </body>
 </html> 
-

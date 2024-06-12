@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "jun",
+            "database": "${workspaceFolder:mini7}/db.sqlite3"
+        }
+    ]
+}
