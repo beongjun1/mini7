@@ -1,70 +1,126 @@
 <!doctype html>
 {% load static %}
 <html>
-    <head>        
-        <title>Aivle School Chatbot</title>
-        <meta charset="utf-8">    
-        <link rel="stylesheet" href="{% static 'base.css' %}" />    
-    </head>
-    <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aivle School Chatbot</title>
+    <meta charset="utf-8">    
+    <link rel="icon" href="../img/logo.png"/>
+    <link rel="stylesheet" href="{% static 'base.css' %}" />    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/TextPlugin.min.js"></script>
+</head>
+<body>
+    <div class="container">
         <header>
-            {% comment %} <h1>에이블스쿨 FAQ Chatbot</h1>
-            <button><a href="chatgpt/">Chatbot</a></button> {% endcomment %}
-            
-            <div class="slideshow-container">
-                <div class="mySlides fade">
-                    <h1>에이블스쿨 FAQ Chatbot</h1>
-                    <button><a href="chatgpt/">Chatbot</a></button>
-                    {% comment %} <div class="text">Caption Text</div> {% endcomment %}
-                  </div>
+            <a><h2 id="logo">Aivle School</h2></a>
+            <div class="menu-icon" id="menu-icon">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <div class="menu" id="menu">
+                <div class="close-icon" id="close-icon">x</div>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/">About</a></li>
+                    <li><a href="/login">Login</a></li>
+                </ul>
             </div>
         </header>
-        <nav id="navbar">
-            <div class="head">
-                <h1><a href="/">AIVLE</a></h1>
-                <!-- nav -->
-                <nav>
-                    <div class="logo">
-                        <a href="#"><img src="https://aivle.kt.co.kr/tpl/011/img/common/logo.png" alt="AIVLE Logo"></a>
-                    </div>
-                    <ul class="nav-links">
-                        <li><a href="#">About AIVLE</a></li>
-                        <li><a href="#">Program</a></li>
-                        <li><a href="#">Apply</a></li>
-                        <li><a href="#">Q&A</a></li>
-                    </ul>
-                </nav>
         <main>
-            <div id="contents-card">
-                <h2>제목</h2>
-                {% comment %} <button><a href="chatgpt/">Chatbot</a></button> {% endcomment %}
-            
-                <div id="skill_info">
-                    {% comment %} <h2>사용 기술</h2> {% endcomment %}
-                    <li><a href="https://www.djangoproject.com/" target="_blank"></a> 내용</li>
-                </div>
+            <div id="intro">
+                <h2 id="animated-text"></h2>
+                <span class="cursor">|</span>
             </div>
-            
-            <div id="contents-card">
-                <h2>제목</h2>
-                {% comment %} <button><a href="chatgpt/">Chatbot</a></button> {% endcomment %}
-            
-                <div id="skill_info">
-                    {% comment %} <h2>사용 기술</h2> {% endcomment %}
-                    <li><a href="https://www.djangoproject.com/" target="_blank"></a>내용</li>
-                </div>
-            </div>
-
-            <div id="contents-card">
-                <h2>제목</h2>
-                {% comment %} <button><a href="chatgpt/">Chatbot</a></button> {% endcomment %}
-            
-                <div id="skill_info">
-                    {% comment %} <h2>사용 기술</h2> {% endcomment %}
-                    <li><a href="https://www.djangoproject.com/" target="_blank"></a>내용</li>
-                </div>
-            </div>
-
-
+            <button id="chatbot-button" onClick="location.href='chatgpt/'">Chatbot</button>
         </main>
-    </body>
+    </div>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const textElement = document.getElementById("animated-text");
+            const cursorElement = document.querySelector(".cursor");
+
+            // Register the TextPlugin
+            gsap.registerPlugin(TextPlugin);
+
+            // Cursor blink animation
+            gsap.to(cursorElement, {
+                opacity: 0,
+                ease: "power2.inOut",
+                repeat: -1,
+                duration: 0.5,
+                yoyo: true
+            });
+
+            const tl = gsap.timeline({ repeat: 0 });
+
+            tl.to(textElement, {
+                duration: 4,
+                text: "ASK TO Aivle School :)",
+                ease: "none"
+            }).to(cursorElement, {
+                opacity: 1,
+                duration: 0.5,
+                repeat: -1,
+                yoyo: true
+            });
+
+            // Menu icon hover effect
+            const menuIcon = document.getElementById('menu-icon');
+            const menu = document.getElementById('menu');
+            const closeIcon = document.getElementById('close-icon');
+
+            menuIcon.addEventListener('mouseover', () => {
+                gsap.to(menuIcon, { color: '#86e0dc', duration: 0.01 });
+            });
+
+            menuIcon.addEventListener('mouseout', () => {
+                gsap.to(menuIcon, { color: '#38b8b2', duration: 0.01 });
+            });
+
+            menuIcon.addEventListener('click', () => {
+                gsap.to(menu, { x: 0, duration: 0.5 });
+            });
+
+            closeIcon.addEventListener('click', () => {
+                gsap.to(menu, { x: '100%', duration: 0.5 });
+            });
+
+            closeIcon.addEventListener('mouseover', () => {
+                gsap.to(closeIcon, { color: '#86e0dc', duration: 0.3 });
+            });
+
+            closeIcon.addEventListener('mouseout', () => {
+                gsap.to(closeIcon, { color: '#38b8b2', duration: 0.3 });
+            });
+
+            
+
+            // Chatbot Button Animation
+            const chatbotButton = document.getElementById('chatbot-button');
+            if (chatbotButton) {
+                chatbotButton.addEventListener('mouseover', () => {
+                    gsap.to(chatbotButton, {
+                        scale: 1.2,
+                        text: "Welcome !",
+                        duration: 0.005
+                    });
+                });
+
+                chatbotButton.addEventListener('mouseout', () => {
+                    gsap.to(chatbotButton, {
+                        scale: 1,
+                        text: "chatbot",
+                        duration: 0.005
+                    });
+                });
+            } else {
+                console.error('chatbot-button element not found');
+            }
+        });
+    </script>
+</body>
+</html>

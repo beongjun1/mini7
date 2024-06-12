@@ -6,22 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot</title>
     <link rel="stylesheet" href="{% static 'gpt/style.css' %}">
-    <link rel="stylesheet" href="{% static 'gpt/chatstyles.css' %}">
 </head>
 <body>
     <div class="container">
         <div class="sidebar">
-            <button onclick="displayEmptyChat()">New Chat</button>
+            <div id="sidebar-nav">
+                <h2 id="logo" onClick="location.href='/'">Aivle School</h2>
+                <div id="profile" onClick="location.href='/profile'">my profile</div>
+            </div>
+            <div class="sidebar-header">
+                <h2>Chat Rooms</h2>
+                <button id="add-room-button" onclick="displayEmptyChat()">+</button>
+            </div>
+
             <ul class="chat-list">
                 {% for chat in chats %}
-                    <li class="chat" onclick="loadChat({{ chat.id }})">
+                    <li class="chat-room" onclick="loadChat({{ chat.id }})">
                         <div class="bubble">{{ chat.thumbnail }}</div>
                     </li>
                 {% endfor %}
             </ul>
         </div>
         <div class="chat-container">
-            <div class="chat-header">Chatbot</div>
             <div class="chat-messages" id="chat-messages">
                 <!-- 이전 메시지 표시 -->
                 <ul class="messages">
@@ -33,10 +39,9 @@
                 </ul>
             </div>
             <div class="input-container">
-                <textarea id="message-input" placeholder="Type a message..."></textarea>
-                <button onclick="sendMessage()">Send</button>
-                <a href="{% url 'chatgpt:download_chat_history' %}" class="button-link">Save</a>
-            </div>            
+                <textarea id="message-input" placeholder="Enter question here..." rows={1}></textarea>
+                <button id="send-button" onclick="sendMessage()">Send</button>
+            </div>  
             
     </div>
     <script>
