@@ -23,7 +23,8 @@ class EmbeddingFulltextSearchContent(models.Model):
     id = models.IntegerField(primary_key=True)
     c0 = models.TextField()
     string_value = models.TextField(null=True)
-    class Meta:
-        db_table = 'embedding_fulltext_search_content'
 
 
+class QA(models.Model):
+    category = models.CharField(max_length=100)
+    qa = models.TextField()

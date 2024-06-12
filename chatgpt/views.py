@@ -27,7 +27,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Chroma 데이터베이스 초기화 - 사전에 database가 완성 되어 있다는 가정하에 진행 - aivleschool_qa.csv 내용이 저장된 상태임
 embeddings = OpenAIEmbeddings(model = "text-embedding-ada-002")
-database = Chroma(persist_directory = "./database", embedding_function = embeddings)
+database = Chroma(persist_directory = "./db", embedding_function = embeddings)
 
 # def index(request):
 #     return render(request, 'gpt/index.html')
