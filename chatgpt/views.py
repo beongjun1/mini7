@@ -1,4 +1,3 @@
-import csv
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import JsonResponse
@@ -16,6 +15,7 @@ from langchain.chains import RetrievalQA, ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory , ChatMessageHistory 
 from langchain.schema import Document
 from langchain.cache import SQLiteCache
+from datetime import timedelta
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -188,3 +188,9 @@ def download(request):
         writer.writerow([message.user, message.text, message.timestamp])
 
     return response
+
+@csrf_exempt 
+def session_out(request):
+    if request.method == 'POST': 
+        Message.objects.all().delete()
+    return render(request, 'main.html')

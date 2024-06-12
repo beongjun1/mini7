@@ -19,14 +19,15 @@ from django.urls import path, include
 from django.shortcuts import render
 
 def index(request):
-    return render(request,'index.html')
+    return render(request,'layout.html')
 
 urlpatterns = [
-    path('',index),
+    path('',include('main.urls')),
     path('chatgpt/',include('chatgpt.urls')),
     path('selfchatgpt/',include('selfchatgpt.urls')),
     path('admin/', admin.site.urls),
-    
+    path("account/", include('account.urls')),
+    path("main/", include('main.urls')),
 ]
 
 from django.conf import settings

@@ -11,4 +11,5 @@ urlpatterns = [
     path('add_room/', views.add_chat_room, name='chatgpt:add_chat_room'),
     path('download/', views.download, name='download_chat_history'),
     path('admin/', admin.site.urls),
+    path('api/session/', views.session_out, name='session_out'),
 ]

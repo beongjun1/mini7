@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% load static %}
+
+{% block content %}
+    <h2>{% if user.is_authenticated %}{{ user }}님{% else %}손님{% endif %}</h2>
+    <button id='chatgptbutton'>Chatbot</a></button>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var chatbotButton = document.getElementById('chatgptbutton');
+            chatbotButton.addEventListener('click', function(event) {
+                // 사용자가 인증되었는지 확인
+                {% if not user.is_authenticated %}
+                    alert("로그인이 필요합니다.");
+                {% else %}
+                    window.location.href = "{% url 'chatgpt:chat_view' %}";
+                {% endif %}
+            });
+        });
+    </script>
+    <div id="skill_info">
+        <h2>사용 기술</h2>
+        <ul>
+            <li><a href="https://www.djangoproject.com/" target="_blank">Django</a> : Python으로 작성된 오픈 소스 웹 프레임워크로, 빠르고 쉬운 웹 개발이 가능</li>
+        </ul>
+    </div>
+{% endblock %}
