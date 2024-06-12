@@ -1,61 +1,164 @@
-@font-face {
-    font-family: 'D2Coding';
-    src: url('../font/D2Coding.ttc');
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    overflow: hidden;
 }
 
-html, body {
+.container {
+    text-align: center;
+    color: #38b8b2;
+}
+
+header {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 2em;
+    width: 100%;
+    /* display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px; */
+}
+
+#logo {
     margin: 0;
-    padding: 4%;
+    padding-left: 10px;
+    float: left;
+    cursor: pointer;
+}
+
+.menu-icon {
+    /* display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 24px;
+    cursor: pointer;
+    transition: color 0.3s; */
+
+    position: absolute;
+    top: 15px;
+    right: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.menu-icon .bar {
+    height: 4px;
+    width: 100%;
+    background-color: currentColor;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100vw;
+    width: 200px;
+    background-color: #fff;
+    box-shadow: 0px 0 7px rgba(57, 57, 57, 0.5);
+    padding-top: 60px;
+    transform: translateX(100%);
+    transition: transform 0.5s;
+}
+
+.close-icon {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.menu ul li {
+    width: 100%;
+}
+
+.menu ul li a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #333;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     height: 100%;
-    font-family: 'Roboto', 'D2Coding', sans-serif;
-    background-color: #f8f8f8;
+    width: 100%;
+}
+
+#intro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 100px;
+    cursor: zoom-in;
+
+}
+
+#animated-text {
+    font-size: 6em;
+    font-weight: bold;
+    margin: 0;
+    display: inline;
+}
+
+.cursor {
+    display: inline-block;
+    font-size: 4.7em;
+    color: #333333;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
 }
 
 a {
     color: inherit;
     text-decoration: none;
-  }
-
-main {
-    /* header height 60px + footer height 60px = 120px */
-    /* height: calc(100% - 120px);  */
-    max-width: 720px;
-    padding: 10%;
-    margin: 0 auto;
-    text-align: center;
-    display: table;
-    border-radius: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    background-color: white;
-    overflow: hidden; /* 내부 요소가 넘치지 않도록 설정 */
 }
 
-main button {
+#chatbot-button {
     margin-top: 50px;
     padding: 20px 50px;
     color: white;
-    background-color: #6c9ac6;
+    background-color: #38b8b2;
     border: none;
     border-radius: 50px;
     font-size: 20px;
     font-weight: bold;
     cursor: pointer;
-}
-
-#skill_info {
-    padding-top: 10%;   
-}
-
-#skill_info h2 {
-    float: left;
-}
-
-#skill_info li {
-    float: left;
-    /* padding-left: 5%; */
-}
-
-#skill_info button {
-    float: left;
-    /* padding-left: 5%; */
+    transition: transform 0.3s ease;
 }

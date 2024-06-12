@@ -6,49 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot</title>
     <link rel="stylesheet" href="{% static 'gpt/style.css' %}">
-    <link rel="stylesheet" href="{% static 'gpt/chatstyles.css' %}">
 </head>
 <body>
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <div id="navbar" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="/main/">Home</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    {% if not user.is_authenticated %}
-                        <li><a href="{% url 'signup' %}">회원 가입 </a> </li>
-                        <li><a href="{% url 'login' %}?next={{request.path}}">로그인</a></li>
-                    {% else %}
-                        {% if user.is_superuser %}
-                        <li><a href="{% url 'admin:index' %}">관리자 페이지</a></li>
-                        {% endif %}
-                    <li><a href="">{{user}}님!</a> </li> 
-                    <li><a href="{% url 'profile' %}">내정보</a> </li>
-                    <li>
-                        <form action="{% url 'logout' %}?next={{request.path}}" method="post">
-                            {% csrf_token %}
-                            <button type="submit">로그 아웃</button>
-                        </form>
-                    </li>
-                    {% endif %}
-                 </ul>
-                </div>
-        </div>
-    </nav>
     <div class="container">
         <div class="sidebar">
-            <button onclick="displayEmptyChat()">New Chat</button>
+            <div id="sidebar-nav">
+                <h2 id="logo" onClick="location.href='/'">Aivle School</h2>
+                <div><a id="profile" href="{% url 'profile' %}">my profile</a></div>
+            </div>
+            <div class="sidebar-header">
+                <h2>Chat Rooms</h2>
+                <button id="add-room-button" onclick="displayEmptyChat()">+</button>
+            </div>
             <ul class="chat-list">
                 {% for chat in chats %}
-                    <li class="chat" onclick="loadChat({{ chat.id }})">
+                <li class="chat-room" onclick="loadChat({{ chat.id }})">
                         <div class="bubble">{{ chat.thumbnail }}</div>
                     </li>
                 {% endfor %}
             </ul>
         </div>
         <div class="chat-container">
-            <div class="chat-header">Chatbot</div>
+
             <div class="chat-messages" id="chat-messages">
                 <!-- 이전 메시지 표시 -->
                 <ul class="messages">
@@ -60,8 +39,8 @@
                 </ul>
             </div>
             <div class="input-container">
-                <textarea id="message-input" placeholder="Type a message..."></textarea>
-                <button onclick="sendMessage()">Send</button>
+                <textarea id="message-input" placeholder="Enter question here..." rows={1}></textarea>
+                <button id="send-button" onclick="sendMessage()">Send</button>
                 <a href="{% url 'chatgpt:download_chat_history' %}" class="button-link">Save</a>
             </div>            
             

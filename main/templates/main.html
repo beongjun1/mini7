@@ -1,27 +1,148 @@
-{% extends "layout.html" %}
-
+<!doctype html>
 {% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aivle School Chatbot</title>
+    <meta charset="utf-8">    
+    <link rel="icon" href="../img/logo.png"/>
+    <link rel="stylesheet" href="{% static 'base.css' %}" />    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/TextPlugin.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a><h2 id="logo">Aivle School</h2></a>
+            <div class="menu-icon" id="menu-icon">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <div class="menu" id="menu">
+                <div class="close-icon" id="close-icon">x</div>
+                <h4>{% if user.is_authenticated %}{{ user }}님{% else %}손님{% endif %}</h4>
+                <ul>
+                    {% if not user.is_authenticated %}
+                        <li><a href="{% url 'signup' %}">회원 가입 </a> </li>
+                        <li><a href="{% url 'login' %}?next={{request.path}}">로그인</a></li>
+                    {% else %}
+                        {% if user.is_superuser %}
+                        <li><a href="{% url 'admin:index' %}">관리자 페이지</a></li>
+                        {% endif %}
+                    <li><a href="">{{user}}님!</a> </li> 
+                    <li><a href="{% url 'profile' %}">내정보</a> </li>
+                    <li>
+                        <form action="{% url 'logout' %}?next={{request.path}}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">로그 아웃</button>
+                        </form>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </header>
+        <main>
+            <div id="intro">
+                <h2 id="animated-text"></h2>
+                <span class="cursor">|</span>
+            </div>
+            <button id="chatbot-button" onClick="location.href='chatgpt/'">Chatbot</button>
+        </main>
+    </div>    
 
-{% block content %}
-    <h2>{% if user.is_authenticated %}{{ user }}님{% else %}손님{% endif %}</h2>
-    <button id='chatgptbutton'>Chatbot</a></button>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var chatbotButton = document.getElementById('chatgptbutton');
-            chatbotButton.addEventListener('click', function(event) {
-                // 사용자가 인증되었는지 확인
-                {% if not user.is_authenticated %}
-                    alert("로그인이 필요합니다.");
-                {% else %}
-                    window.location.href = "{% url 'chatgpt:chat_view' %}";
-                {% endif %}
+        document.addEventListener('DOMContentLoaded', () => {
+            const textElement = document.getElementById("animated-text");
+            const cursorElement = document.querySelector(".cursor");
+
+            // Register the TextPlugin
+            gsap.registerPlugin(TextPlugin);
+
+            // Cursor blink animation
+            gsap.to(cursorElement, {
+                opacity: 0,
+                ease: "power2.inOut",
+                repeat: -1,
+                duration: 0.5,
+                yoyo: true
             });
+
+            const tl = gsap.timeline({ repeat: 0 });
+
+            tl.to(textElement, {
+                duration: 4,
+                text: "ASK TO Aivle School :)",
+                ease: "none"
+            }).to(cursorElement, {
+                opacity: 1,
+                duration: 0.5,
+                repeat: -1,
+                yoyo: true
+            });
+
+            // Menu icon hover effect
+            const menuIcon = document.getElementById('menu-icon');
+            const menu = document.getElementById('menu');
+            const closeIcon = document.getElementById('close-icon');
+
+            menuIcon.addEventListener('mouseover', () => {
+                gsap.to(menuIcon, { color: '#86e0dc', duration: 0.01 });
+            });
+
+            menuIcon.addEventListener('mouseout', () => {
+                gsap.to(menuIcon, { color: '#38b8b2', duration: 0.01 });
+            });
+
+            menuIcon.addEventListener('click', () => {
+                gsap.to(menu, { x: 0, duration: 0.5 });
+            });
+
+            closeIcon.addEventListener('click', () => {
+                gsap.to(menu, { x: '100%', duration: 0.5 });
+            });
+
+            closeIcon.addEventListener('mouseover', () => {
+                gsap.to(closeIcon, { color: '#86e0dc', duration: 0.3 });
+            });
+
+            closeIcon.addEventListener('mouseout', () => {
+                gsap.to(closeIcon, { color: '#38b8b2', duration: 0.3 });
+            });
+
+
+
+            // Chatbot Button Animation
+            const chatbotButton = document.getElementById('chatbot-button');
+            if (chatbotButton) {
+                chatbotButton.addEventListener('mouseover', () => {
+                    gsap.to(chatbotButton, {
+                        scale: 1.2,
+                        text: "Welcome !",
+                        duration: 0.005
+                    });
+                });
+
+                chatbotButton.addEventListener('mouseout', () => {
+                    gsap.to(chatbotButton, {
+                        scale: 1,
+                        text: "chatbot",
+                        duration: 0.005
+                    });
+                });
+                chatbotButton.addEventListener('click', function(event) {
+                    // 사용자가 인증되었는지 확인
+                    {% if not user.is_authenticated %}
+                        alert("로그인이 필요합니다.");
+                    {% else %}
+                        window.location.href = "{% url 'chatgpt:chat_view' %}";
+                    {% endif %}
+                });
+            } else {
+                console.error('chatbot-button element not found');
+            }
         });
     </script>
-    <div id="skill_info">
-        <h2>사용 기술</h2>
-        <ul>
-            <li><a href="https://www.djangoproject.com/" target="_blank">Django</a> : Python으로 작성된 오픈 소스 웹 프레임워크로, 빠르고 쉬운 웹 개발이 가능</li>
-        </ul>
-    </div>
-{% endblock %}
+</body>
+</html>
