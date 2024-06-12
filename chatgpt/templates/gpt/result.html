@@ -15,8 +15,7 @@
                 <button onclick="addChatRoom()">+</button>
             </div>
             <ul class="chat-rooms" id="chat-rooms">
-                <!-- 채팅방 목록 -->
-                <a href="{% url 'chatgpt:download_chat_history' %}" class="button-link">대화 히스토리 다운로드</a>
+                <!-- 채팅방 목록 -->    
                 {% for room in chat_rooms %}
                     <li class="chat-room" onclick="selectChatRoom('{{ room.id }}')">{{ room.name }}</li>
                 {% endfor %}
@@ -37,7 +36,9 @@
             <div class="input-container">
                 <textarea id="message-input" placeholder="Type a message..."></textarea>
                 <button onclick="sendMessage()">Send</button>
+                <a href="{% url 'chatgpt:download_chat_history' %}" class="button-link">Save</a>
             </div>            
+            
     </div>
     <script>
         function sendMessage() {
@@ -124,6 +125,8 @@
                 chatRooms.appendChild(newRoom);
             }
         }
+
+       
 
         function selectChatRoom(roomId) {
             // 이 함수에서 선택한 채팅방에 맞게 메시지를 로드하는 로직

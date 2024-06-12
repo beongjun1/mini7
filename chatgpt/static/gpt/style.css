@@ -148,7 +148,8 @@ body {
 .input-container {
     display: flex;
     border-top: 1px solid #ddd;
-}
+    }
+
 
 .input-container textarea {
     flex: 1;
@@ -173,10 +174,27 @@ textarea:focus {
     border: none;
     padding: 10px 20px;
     cursor: pointer;
+    
 }
 
 .input-container button:hover {
     background-color: #5a8bb0;
+}
+
+.button-link {
+    text-decoration: none;
+    background-color: #587c9e;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 13.5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.button-link:hover {
+    background-color: #384d61;
 }
 
 .typing {
@@ -209,3 +227,6 @@ textarea:focus {
         opacity: 1;
     }
 }
+
+
+
