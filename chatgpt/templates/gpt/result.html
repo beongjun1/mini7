@@ -41,11 +41,14 @@
     </div>
     <script>
         let chatId = "{{ chat_id|default_if_none:'' }}";
+        let userId = "{{ user_id|default_if_none:'' }}";
+
         if (chatId === "") chatId = null;
+        if (userId === "") userId = 'admin';
 
         function loadChat(id) {
-            console.log("Loading chat with ID:", id);
-            fetch(`/chatgpt/chat_view/${id}/`)
+            console.log("Loading chat with chat_id:", id);
+            fetch(`/chatgpt/chat_view/${userId}/${id}/`)
                 .then(response => response.text())
                 .then(html => {
                     const parser = new DOMParser();
@@ -53,14 +56,14 @@
                     const messages = doc.querySelector('.chat-messages').innerHTML;
                     document.querySelector('.chat-messages').innerHTML = messages;
                     chatId = id;
-                    history.pushState(null, '', `/chatgpt/chat_view/${id}/`);
+                    history.pushState(null, '', `/chatgpt/chat_view/${userId}/${id}/`);
                 });
         }
 
         function displayEmptyChat() {
             document.querySelector('.chat-messages').innerHTML = '<ul class="messages"></ul>';
             chatId = null; // 명시적으로 chatId를 null로 설정
-            history.pushState(null, '', `/chatgpt/chat_view/`);
+            history.pushState(null, '', `/chatgpt/chat_view/${userId}/`);
         }
 
         function sendMessage() {
@@ -97,7 +100,7 @@
 
             // 서버에 메시지 전송
             let url = "/chatgpt/api/chat/";
-            let bodyContent = `question=${encodeURIComponent(message)}`;
+            let bodyContent = `question=${encodeURIComponent(message)}&user_id=${encodeURIComponent(userId)}`;
             if (chatId) {
                 bodyContent += `&chat_id=${encodeURIComponent(chatId)}`;
             }
@@ -118,8 +121,8 @@
                 if (data.success) {
                     if (!chatId) {
                         chatId = data.chat_id;  // 새로운 chat_id 설정
-                        history.pushState(null, '', `/chatgpt/chat_view/${chatId}/`);
-                        window.location.href = `/chatgpt/chat_view/${chatId}/`;  // URL 변경
+                        history.pushState(null, '', `/chatgpt/chat_view/${userId}/${chatId}/`);
+                        window.location.href = `/chatgpt/chat_view/${userId}/${chatId}/`;  // URL 변경
                     }
                     const botMessage = document.createElement('li');
                     botMessage.className = 'message bot';

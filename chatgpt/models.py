@@ -12,6 +12,7 @@ class Chat(models.Model):
     # 썸네일 - 새로운 방id 생길때 최초 유저 메세지 앞 10글자
     thumbnail = models.CharField(max_length=10)
     timestamp = models.DateTimeField(auto_now_add=True)
+    user_id = models.CharField(max_length=255, default='admin')
     
     def __str__(self):
         return self.thumbnail
@@ -21,7 +22,7 @@ class ChatRoom(models.Model):
     
 class Message(models.Model):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
-    user_id = models.CharField(max_length=255, default='1')
+    user_id = models.CharField(max_length=255, default='admin')
     user = models.CharField(max_length=255)
     text = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
