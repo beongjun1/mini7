@@ -160,6 +160,9 @@
                     if (response.ok) {
                         // Remove the chat from the UI
                         event.target.closest('.chat-room').remove();
+                        // URL을 홈 페이지로 변경
+                        history.pushState(null, '', `/chatgpt/`);
+                        window.location.href = `/chatgpt/`;  // URL 변경
                     } else {
                         alert('Failed to delete chat.');
                     }
