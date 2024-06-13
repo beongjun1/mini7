@@ -13,6 +13,7 @@
     <div class="container">
         <h2>회원가입</h2>
         <form id="signup-form" method="post">
+            {% csrf_token %}
             <label for="username">사용자 이름</label>
             <input type="text" id="username" name="username" required>
 
