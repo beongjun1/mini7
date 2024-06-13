@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로필</title>
-    <link rel="stylesheet" href="{% static 'account.css' %}">
+    <link rel="stylesheet" href="{% static 'account/account.css' %}">
     <link rel="icon" href="{% static 'logo.png' %}"/>
 </head>
 <body>
@@ -20,10 +20,6 @@
             <p><strong>전화번호:</strong> <span id="profile-tel">{{user.profile.phone_number}}</span></p>
             <p><strong>주소:</strong> <span id="profile-address">{{user.profile.address}}</span></p>
         </div>
-        <form action="{% url 'logout' %}?next={{request.path}}" method="post">
-            {% csrf_token %}
-            <input id="submit-button" type="submit" value="로그 아웃">
-        </form>
         <div id="password-change-button">
             <a href="{% url 'password_change' %}">암호 변경하기</a>
         </div>

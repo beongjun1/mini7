@@ -203,7 +203,26 @@ textarea:focus {
     transition: color 1s;
 }
 
+#save-button {
+    background-color: #38b8b2;
+    color: white;
+    border: none;
+    margin: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 100px;
+    width : 70px;
+    height : 70px;
+    border-radius: 50%;
+    transition: color 1s;
+    text-decoration: none;
+}
+
 #send-button:hover {
+    background-color: #53c6c0;
+}
+
+#save-button:hover {
     background-color: #53c6c0;
 }
 
@@ -236,9 +255,5 @@ textarea:focus {
     30% {
         opacity: 1;
     }
-}
-
-#profile{
-    text-decoration: none;
 }
 

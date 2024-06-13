@@ -12,11 +12,10 @@
         <div class="sidebar">
             <div id="sidebar-nav">
                 <h2 id="logo" onClick="location.href='/'">Aivle School</h2>
-                <div><a id="profile" href="{% url 'profile' %}">my profile</a></div>
+                <div><a href="{% url 'chatgpt:download_chat_history' %}" class="button-link" id="save-button">Save</a></div>
             </div>
             <div class="sidebar-header">
-                <h2>Chat Rooms</h2>
-                <button id="add-room-button" onclick="displayEmptyChat()">+</button>
+                <button id="add-room-button" onclick="displayEmptyChat()">New Chat</button>
             </div>
             <ul class="chat-list">
                 {% for chat in chats %}
@@ -41,7 +40,6 @@
             <div class="input-container">
                 <textarea id="message-input" placeholder="Enter question here..." rows={1}></textarea>
                 <button id="send-button" onclick="sendMessage()">Send</button>
-                <a href="{% url 'chatgpt:download_chat_history' %}" class="button-link">Save</a>
             </div>            
             
     </div>

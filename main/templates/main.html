@@ -34,7 +34,6 @@
                         {% if user.is_superuser %}
                         <li><a href="{% url 'admin:index' %}">관리자 페이지</a></li>
                         {% endif %}
-                    <li><a href="">{{user}}님!</a> </li> 
                     <li><a href="{% url 'profile' %}">내정보</a> </li>
                     <li>
                         <form action="{% url 'logout' %}?next={{request.path}}" method="post">
