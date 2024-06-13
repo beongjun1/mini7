@@ -1,15 +1,43 @@
-{% extends "layout.html" %}
-{% block title %}  
-    회원가입
-{% endblock %}
-{% block content %}
-    <h1> 회원 가입 </h1>
-    <form action="" method="post">
-        {% csrf_token %}
-        <table>
-            {{ form.as_table }}
-        </table>
-        <input type="submit" />
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <link rel="stylesheet" href="{% static 'account.css' %}">
+    <link rel="icon" href="{% static 'logo.png' %}"/>
+</head>
+<body>
+    <h2 id="logo" onClick="location.href='/'">Aivle School</h2>
+    <div class="container">
+        <h2>회원가입</h2>
+        <form id="signup-form" method="post">
+            <label for="username">사용자 이름</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="email">이메일</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="confirm-password">비밀번호 확인</label>
+            <input type="password" id="confirm-password" name="confirm-password" required>
+            
+            <label for="phone-number">전화번호</label>
+            <input type="text" id="phone-number" name="phone-number" required>
+            
+            <label for="address">주소</label>
+            <input type="text" id="address" name="address" required>
+
         
-    </form>
-{% endblock %}
+
+
+
+            <input id="submit-button" type="submit" value="회원가입">
+            <p>이미 계정이 있으신가요? <a href="{% url 'login' %}?next={{request.path}}">로그인</a></p>
+        </form>
+    </div>
+</body>
+</html>

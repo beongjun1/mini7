@@ -1,0 +1,56 @@
+
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 30px;
+}
+
+main {
+    background: #fff;
+    padding: 20px;
+    margin-top: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+h1, h2 {
+    color: #38b8b2;
+}
+p {
+    margin-bottom: 20px;
+    font-size:20px;
+}
+.note {
+    font-style: italic;
+    color: #7d7d7d;
+}
+
+
+/* 첫 번째 부분 스타일 */
+.first-part {
+    color: #38b8b2;
+    font-weight: bold;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+.h_text {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.h_text span {
+    color: #38b8b2;
+}
+.bold-text, .h_text span {
+    font-size: 24px;
+}
+.fakeline {
+    border:  2px solid #38b8b2; 
+    width: 10%;
+    margin: 40px auto;
+ }

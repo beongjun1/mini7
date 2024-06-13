@@ -1,14 +1,38 @@
-{% extends "layout.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필</title>
+    <link rel="stylesheet" href="{% static 'account.css' %}">
+    <link rel="icon" href="{% static 'logo.png' %}"/>
+</head>
+<body>
+    <h2 id="logo" onClick="location.href='/'">Aivle School</h2>
 
-{% block content %}
-    <h1> 내정보 </h1>
-    <ul>
-        <li> name : {{user}}</li>
-        <li> email : {{user.email}}</li>
-        <li> tel : {{user.profile.phone_number}}</li>
-        <li> address : {{user.profile.address}}</li>
-        <li>{{user.date_joined}}</li>
-    </ul>
-    <a href="{% url 'password_change' %}">[암호 변경하기]</a>
 
-{% endblock %}
+    <div class="container">
+        <h2>내 프로필</h2>
+        <div class="profile">
+            <p><strong>이름:</strong> <span id="profile-username">{{user}}</span></p>
+            <p><strong>이메일:</strong> <span id="profile-email">{{user.email}}</span></p>
+            <p><strong>전화번호:</strong> <span id="profile-tel">{{user.profile.phone_number}}</span></p>
+            <p><strong>주소:</strong> <span id="profile-address">{{user.profile.address}}</span></p>
+        </div>
+        <form action="{% url 'logout' %}?next={{request.path}}" method="post">
+            {% csrf_token %}
+            <input id="submit-button" type="submit" value="로그 아웃">
+        </form>
+        <div id="password-change-button">
+            <a href="{% url 'password_change' %}">암호 변경하기</a>
+        </div>
+    </div>
+    <script>
+        function logout() {
+            alert('로그아웃 되었습니다.');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

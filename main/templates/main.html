@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aivle School Chatbot</title>
     <meta charset="utf-8">    
-    <link rel="icon" href="../img/logo.png"/>
+    <link rel="icon" href="{% static 'image/logo.png' %}"/>
     <link rel="stylesheet" href="{% static 'base.css' %}" />    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/TextPlugin.min.js"></script>
@@ -22,8 +22,11 @@
             </div>
             <div class="menu" id="menu">
                 <div class="close-icon" id="close-icon">x</div>
-                <h4>{% if user.is_authenticated %}{{ user }}님{% else %}손님{% endif %}</h4>
+                <h4 id="username">{% if user.is_authenticated %}{{ user }}님!{% else %}손님{% endif %}</h4>
                 <ul>
+                    <li><a href="{% url 'main:greet' %}">About</a> </li>
+                    <li><a href="{% url 'main:program'%}">Program</a></li>
+                    <li><a href="{% url 'main:qa' %}">FAQ</a> </li>
                     {% if not user.is_authenticated %}
                         <li><a href="{% url 'signup' %}">회원 가입 </a> </li>
                         <li><a href="{% url 'login' %}?next={{request.path}}">로그인</a></li>
@@ -31,12 +34,12 @@
                         {% if user.is_superuser %}
                         <li><a href="{% url 'admin:index' %}">관리자 페이지</a></li>
                         {% endif %}
-                    <li><a href="">{{user}}님!</a> </li> 
+                    {% comment %} <li><a href="">{{user}}님!</a> </li>  {% endcomment %}
                     <li><a href="{% url 'profile' %}">내정보</a> </li>
                     <li>
                         <form action="{% url 'logout' %}?next={{request.path}}" method="post">
                             {% csrf_token %}
-                            <button type="submit">로그 아웃</button>
+                            <input id="logout-button" type="submit" value="로그 아웃"></button>
                         </form>
                     </li>
                     {% endif %}

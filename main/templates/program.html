@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Example</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style2.css' %}">
+</head>
+<body>
+    <main>
+        <section style="overflow: auto;">
+            <p>
+                <span class="bold-text" style="font-size: 24px; color : #38b8b2;">AI/DX 혁신사례와 </span>
+                <span class="bold-text"> 경험을 바탕으로한</span><br>
+                <span class="bold-text" style="font-size: 24px; color : #38b8b2;">
+                    기업 실전 프로젝트를 중심으로 </span>
+                    <span class="bold-text">구성하였습니다.</span>
+            </p><br>
+            <hr class="fakeline"><br>
+
+            <div class="h_text" style="text-align: center; margin-top: 20px;">
+                <span class = "bold-text" style="font-size: 24px; color: #38b8b2;">이론, 실습을 거쳐 프로젝트까지,</span><br>
+                <span class = "bold-text" style="font-size: 24px; color: #38b8b2;">단계를 거치며 문제 해결능력을</span>
+                <span class="bold-text" style="font-size: 24px; color: black">향상시킬 수 있습니다.</span>
+            </div><br>
+
+            <img src="{% static 'image/step.png' %}"  style="display: block; margin: 0 auto; max-width: 80%;" /><br>
+
+            <div class="h_text" style="text-align: center; margin-top: 20px;">
+                <span class = "bold-text" style="font-size: 24px; color: #38b8b2;">과제 발굴부터 서비스∙제안서 구현까지 직접 수행하며</span><br>
+                <span class = "bold-text" style="font-size: 24px; color: black;">실전 경험을 쌓을 수 있습니다.</span><br>
+                <hr class="fakeline"><br>
+
+            </div><br>
+
+        </section>
+    </main>
+</body>
+</html>
