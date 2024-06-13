@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot</title>
     <link rel="stylesheet" href="{% static 'gpt/style.css' %}">
+    <link rel="icon" href="{% static 'image/logo.png' %}"/>
 </head>
 <body>
     <div class="container">
@@ -21,6 +22,7 @@
                 {% for chat in chats %}
                 <li class="chat-room" onclick="loadChat({{ chat.id }})">
                         <div class="bubble">{{ chat.thumbnail }}</div>
+                        <button class="delete-button" onclick="deleteChat(event, {{ chat.id }})">x</button>
                     </li>
                 {% endfor %}
             </ul>
@@ -144,25 +146,28 @@
             });
         }
 
-        // 채팅방 추가
-        function addChatRoom() {
-            const roomName = prompt("Enter chat room name:");
-            //const input = document.getElementById('message-input');
-            //const roomName = input.value;
-            roomName
-            if (roomName) {
-                const chatRooms = document.getElementById('chat-rooms');
-                const newRoom = document.createElement('li');
-                newRoom.className = 'chat-room';
-                newRoom.textContent = roomName;
-                newRoom.onclick = function() { selectChatRoom(roomName) };
-                chatRooms.appendChild(newRoom);
+        function deleteChat(event, chatId) {
+            event.stopPropagation(); // Prevent the parent element's click event
+            if (confirm("삭제하시겠습니까?")) {
+                fetch(`/chatgpt/delete_chat/${chatId}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Remove the chat from the UI
+                        event.target.closest('.chat-room').remove();
+                    } else {
+                        alert('Failed to delete chat.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting chat:', error);
+                });
             }
-        }
-
-        function selectChatRoom(roomId) {
-            // 이 함수에서 선택한 채팅방에 맞게 메시지를 로드하는 로직
-            console.log('Selected chat room:', roomId);
         }
 
         // Enter 키로 메시지 전송

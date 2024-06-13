@@ -51,6 +51,7 @@ body {
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #ddd;
+    
 }
 
 .sidebar-header h2 {
@@ -86,11 +87,29 @@ body {
     cursor: pointer;
     border-bottom: 1px solid #ccc;
     transition-duration: 0.2s;
+    display: flex;
+    justify-content: space-between;
 }
 
 .chat-room:hover {
     background-color: #f2f2f2;
     /* border-radius: 10px; */
+}
+
+.delete-button {
+    float: right;
+    border: none;
+    background-color: #ffffff00;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    float: right;
+    border: none;
+    background-color: #ffffff00;
+    color: #53c6c0;
+    cursor: pointer;
 }
 
 .chat-container {

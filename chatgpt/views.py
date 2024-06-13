@@ -167,14 +167,12 @@ def chat(request):
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 @csrf_exempt
-def add_chat_room(request):
-    if request.method == 'POST':
-        room_name = request.POST.get('name')
-        if room_name:
-            new_room = ChatRoom.objects.create(name=room_name)
-            return JsonResponse({'name': new_room.name, 'url': reverse('chatgpt:chat_view', args=[new_room.id])})
-        return JsonResponse({'error': 'Room name is required'}, status=400)
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+def delete_chat(request, chat_id):
+    if request.method == 'DELETE':
+        chat = get_object_or_404(Chat, id=chat_id)
+        chat.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
 
 
 def download(request):
