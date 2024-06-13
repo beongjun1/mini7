@@ -1,12 +1,33 @@
-{% extends "layout.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <link rel="stylesheet" href="{% static 'account.css' %}">
+    <link rel="icon" href="{% static 'image/logo.png' %}"/>
 
-{% block content %}
-<form action="" method="post">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table}}
-    </table>
-    <input type="submit" />
-</form>
 
-{% endblock %}
+</head>
+<body>
+    <h2 id="logo" onClick="location.href='/'">Aivle School</h2>
+    <div class="container">
+        <h2>로그인</h2>
+
+
+
+
+
+        <form id="login-form" method="post">
+            {% csrf_token %}
+            <label for="username">사용자 이름</label>
+            <input type="username" id="username" name="username" required>
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password" required>
+            <input id="submit-button" type="submit" value="로그인">
+            <p>계정이 없으신가요? <a href="{% url 'signup' %}">회원가입</a></p>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIVLE School 소개</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style2.css' %}">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+</head>
+<body>
+    <header>
+    </header>
+    <main>
+        <section>
+            <h2>에이블스쿨은</h2>
+            <p>
+                <span class="first-part">기업 실무형 AI/DX 인재를 양성하는</span><br>
+                <span class="second-part">교육 프로그램 입니다.</span>
+            </p><br>
+        </section>
+        <section>
+            <h2>Q. AIVLE School 이 뭔가요?</h2>
+            <p>
+                <span class="first-part">AIVLE School(에이블스쿨)은 KT의 ‘AI 인재 양성 경험과 노하우’를 내부에서 외부로 확장하여,</span><br>
+                <span class="second-part">고용노동부 K-Digital Training과 함께 대한민국 청년들을 ‘기업 실무형 AI/DX인재’로 양성하고,</span><br>
+                <span class="second-part">일자리 창출에 기여하는 교육 프로그램 입니다.</span>
+            </p>
+            <p class="note">※ AIVLE School에 참여하는 모든 사람 = ‘AIVLER’ (에이블러)</p>
+        </section><br>
+
+        <!-- Swiper Slider Section -->
+        <section>
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="{% static 'image/image1.jpg' %}" alt="Slide 1"></div>
+                    <div class="swiper-slide"><img src="{% static 'image/image2.jpg' %}" alt="Slide 2"></div>
+                    <div class="swiper-slide"><img src="{% static 'image/image3.jpg' %}" alt="Slide 3"></div>
+
+
+                    <!-- 추가 슬라이드 -->
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+                <!-- Add Navigation -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            spaceBetween: 20, // 슬라이드 간의 간격
+            slidesPerView: 1, 
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+    </script>
+</body>
+</html>
